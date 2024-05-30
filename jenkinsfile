@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+    environment {
+        name = "shivam"
+    }
+    stages {
+        stage('Running command') {
+            steps {
+                sh 'date'
+            }
+        }
+        stage('Running multiple commands') {
+            steps {
+                sh '''
+                pwd
+                ls
+                date
+                cal 2024
+                '''
+            }
+        }
+        stage('Env variable') {
+            steps {
+                sh 'echo "${BUILD_ID}"'
+                sh 'echo "${name}"'
+            }
+        }
+        stage('continue?') {
+            steps {
+                script {
+                    input message: 'should we continue', ok: 'Yes we continue'
+                }
+            }
+        }
+        stage('prod') {
+            steps {
+                echo "deploy in prod"
+            }
+        }
+    }
+    post {
+        always {
+           echo 'I will always say hello again!' 
+        }
+        failure {
+           echo 'failed!' 
+        }
+        success {
+           echo 'Success!' 
+        }
+    }
+}
